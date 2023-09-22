@@ -37,6 +37,40 @@ public class UserService : IUserService
         }
     }
 
+    public async Task<Response<string>> AssignTaskToUser(TaskUserDto model)
+    {
+        try
+        {
+            var user = await _context.Users.FindAsync(model.UserId);
+            var toDo = await _context.ToDos.FindAsync(model.TodoId);
+            if (user == null || toDo == null) return new Response<string>(HttpStatusCode.BadRequest);
+            toDo.UserId= user.Id;
+            await _context.SaveChangesAsync();
+            return new Response<string>("Added task to user");
+        }
+        catch (Exception ex)
+        {
+            return new Response<string>(HttpStatusCode.InternalServerError,ex.Message);
+        }
+    }
+
+    public async Task<Response<string>> DeleteTaskFromUser(TaskUserDto model)
+    {
+        try
+        {
+            var user = await _context.Users.FindAsync(model.UserId);
+            var toDo = await _context.ToDos.FindAsync(model.TodoId);
+            if (user == null || toDo == null) return new Response<string>(HttpStatusCode.BadRequest);
+            toDo.UserId = 0;
+            await _context.SaveChangesAsync();
+            return new Response<string>("Deleted task from user");
+        }
+        catch (Exception ex)
+        {
+            return new Response<string>(HttpStatusCode.InternalServerError, ex.Message);
+        }
+    }
+
     public async Task<Response<string>> DeleteUserAsync(int id)
     {
         try

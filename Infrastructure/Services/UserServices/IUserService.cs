@@ -8,4 +8,6 @@ public interface IUserService
     Task<Response<BaseUserDto>> AddUserAsync(AddUserDto model);
     Task<Response<BaseUserDto>> UpdateUserAsync(AddUserDto model);
     Task<Response<string>> DeleteUserAsync(int id);
+    Task<Response<string>> AssignTaskToUser(TaskUserDto model);
+    Task<Response<string>> DeleteTaskFromUser(TaskUserDto model);
 }
